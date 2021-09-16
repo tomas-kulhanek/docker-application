@@ -28,6 +28,7 @@ RUN apk --no-cache add \
   php8-iconv \
   php8-xmlwriter \
   php8-pdo \
+  php8-pdo_mysql \
   php8-tokenizer \
   php8-simplexml \
   php8-sodium \
