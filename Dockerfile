@@ -1,53 +1,66 @@
-FROM alpine:3.14.2
+FROM ubuntu:20.04
 
-LABEL Maintainer="Tomas Kulhanek <jsem@tomaskulhanek.cz>"
-LABEL PHP_VERSION="8.0"
+ARG xdebug
+LABEL maintainer="Tomas Kulhanek <jsem@tomaskulhanek.cz>"
+# Fixes some weird terminal issues such as broken clear / CTRL+L
+ENV TERM=linux
+ENV TZ 'Europe/Prague'
+# Ensure apt doesn't ask questions when installing stuff
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Add application
-WORKDIR /var/www/html
-# Install packages and remove default server definition
-RUN apk --no-cache add \
-  curl \
-  nginx \
-  php8 \
-  php8-ctype \
-  php8-curl \
-  php8-dom \
-  php8-fpm \
-  php8-gd \
-  php8-intl \
-  php8-json \
-  php8-mbstring \
-  php8-mysqli \
-  php8-opcache \
-  php8-openssl \
-  php8-session \
-  php8-xml \
-  php8-xmlreader \
-  php8-zlib \
-  php8-iconv \
-  php8-xmlwriter \
-  php8-pdo \
-  php8-pdo_mysql \
-  php8-tokenizer \
-  php8-simplexml \
-  php8-sodium \
-  php8-soap \
-  php8-fileinfo && \
-  ln -s /usr/bin/php8 /usr/bin/php && \
-  mkdir -p /var/www/html && \
-  chown -R nobody.nobody /var/www/html && \
-  chown -R nobody.nobody /run && \
-  chown -R nobody.nobody /var/lib/nginx && \
-  chown -R nobody.nobody /var/log/nginx
+WORKDIR /var/www
 
+COPY wait-for-it.sh /usr/bin/wait-for-it
+RUN apt-get -y --no-install-recommends update \
+    && apt-get install -y --no-install-recommends gnupg \
+    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" > /etc/apt/sources.list.d/ondrej-php.list \
+    && echo "deb http://archive.ubuntu.com/ubuntu bionic main multiverse restricted universe" >> /etc/apt/sources.list \
+    && echo "deb http://archive.ubuntu.com/ubuntu bionic-security main multiverse restricted universe" >> /etc/apt/sources.list \
+    && echo "deb http://archive.ubuntu.com/ubuntu bionic-updates main multiverse restricted universe" >> /etc/apt/sources.list \
+    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C \
+    && apt-get -y --no-install-recommends update \
+    && apt-get -y --no-install-recommends install \
+        ca-certificates \
+        unzip \
+        php-apcu \
+        php-apcu-bc \
+        php-memcached \
+        php8.0-fpm \
+        php8.0-mysql \
+        php-redis \
+        php8.0-amqp \
+        php8.0-bcmath \
+        php8.0-gd \
+        php8.0-imap \
+        php8.0-intl \
+        php8.0-soap \
+        php8.0-xsl \
+        php8.0-cli \
+        php8.0-curl \
+        php8.0-mbstring \
+        php8.0-opcache \
+        php8.0-readline \
+        php8.0-xml \
+        php8.0-zip \
+        nginx \
+        tzdata && \
+    rm -f /etc/php/8.0/fpm/pool.d/www.conf && \
+    echo $TZ > /etc/timezone && \
+    rm /etc/localtime && \
+    ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    dpkg-reconfigure -f noninteractive tzdata && \
+    apt-get clean && \
+    chmod +x /usr/bin/wait-for-it && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
+
+COPY config/php.ini /etc/php/8.0/fpm/conf.d/00-default.ini
+COPY config/php.ini /etc/php/8.0/cli/conf.d/00-default.ini
+COPY config/php.ini /etc/php/8.0/conf.d/00-default.ini
+COPY config/php-pool.conf /etc/php/8.0/fpm/pool.d/www.conf
 COPY config/nginx.conf /etc/nginx/nginx.conf
-COPY config/fpm-pool.conf /etc/php8/php-fpm.d/www.conf
-COPY config/php.ini /etc/php8/conf.d/custom.ini
-COPY --chown=nobody src/ /var/www/
 
-USER nobody
 
-EXPOSE 8080
-#CMD php-fpm8 -F
+#CMD php-fpm8.0
 #CMD nginx
+EXPOSE 9000
+EXPOSE 8080
