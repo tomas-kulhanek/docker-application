@@ -1,6 +1,5 @@
 FROM ubuntu:20.04
 
-ARG xdebug
 LABEL maintainer="Tomas Kulhanek <jsem@tomaskulhanek.cz>"
 # Fixes some weird terminal issues such as broken clear / CTRL+L
 ENV TERM=linux
