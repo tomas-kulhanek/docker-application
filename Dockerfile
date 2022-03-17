@@ -24,26 +24,26 @@ RUN apt-get -y --no-install-recommends update \
         php-apcu \
         php-apcu-bc \
         php-memcached \
-        php8.0-fpm \
-        php8.0-mysql \
+        php8.1-fpm \
+        php8.1-mysql \
         php-redis \
-        php8.0-amqp \
-        php8.0-bcmath \
-        php8.0-gd \
-        php8.0-imap \
-        php8.0-intl \
-        php8.0-soap \
-        php8.0-xsl \
-        php8.0-cli \
-        php8.0-curl \
-        php8.0-mbstring \
-        php8.0-opcache \
-        php8.0-readline \
-        php8.0-xml \
-        php8.0-zip \
+        php8.1-amqp \
+        php8.1-bcmath \
+        php8.1-gd \
+        php8.1-imap \
+        php8.1-intl \
+        php8.1-soap \
+        php8.1-xsl \
+        php8.1-cli \
+        php8.1-curl \
+        php8.1-mbstring \
+        php8.1-opcache \
+        php8.1-readline \
+        php8.1-xml \
+        php8.1-zip \
         nginx \
         tzdata && \
-    rm -f /etc/php/8.0/fpm/pool.d/www.conf && \
+    rm -f /etc/php/8.1/fpm/pool.d/www.conf && \
     echo $TZ > /etc/timezone && \
     rm /etc/localtime && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
@@ -52,14 +52,14 @@ RUN apt-get -y --no-install-recommends update \
     chmod +x /usr/bin/wait-for-it && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
 
-COPY config/php.ini /etc/php/8.0/fpm/conf.d/00-default.ini
-COPY config/php.ini /etc/php/8.0/cli/conf.d/00-default.ini
-COPY config/php.ini /etc/php/8.0/conf.d/00-default.ini
-COPY config/php-pool.conf /etc/php/8.0/fpm/pool.d/www.conf
+COPY config/php.ini /etc/php/8.1/fpm/conf.d/00-default.ini
+COPY config/php.ini /etc/php/8.1/cli/conf.d/00-default.ini
+COPY config/php.ini /etc/php/8.1/conf.d/00-default.ini
+COPY config/php-pool.conf /etc/php/8.1/fpm/pool.d/www.conf
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 
-#CMD php-fpm8.0
+#CMD php-fpm8.1
 #CMD nginx
 EXPOSE 9000
 EXPOSE 8080
