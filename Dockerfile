@@ -21,12 +21,12 @@ RUN apt-get -y --no-install-recommends update \
     && apt-get -y --no-install-recommends install \
         ca-certificates \
         unzip \
-        php-apcu \
-        php-apcu-bc \
-        php-memcached \
+        php7.3-apcu \
+        php7.3-apcu-bc \
+        php7.3-memcached \
         php7.3-fpm \
         php7.3-mysql \
-        php-redis \
+        php7.3-redis \
         php7.3-amqp \
         php7.3-bcmath \
         php7.3-gd \
