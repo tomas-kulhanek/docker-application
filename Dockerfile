@@ -24,26 +24,26 @@ RUN apt-get -y --no-install-recommends update \
         php-apcu \
         php-apcu-bc \
         php-memcached \
-        php7.3-fpm \
-        php7.3-mysql \
+        php7.4-fpm \
+        php7.4-mysql \
         php-redis \
-        php7.3-amqp \
-        php7.3-bcmath \
-        php7.3-gd \
-        php7.3-imap \
-        php7.3-intl \
-        php7.3-soap \
-        php7.3-xsl \
-        php7.3-cli \
-        php7.3-curl \
-        php7.3-mbstring \
-        php7.3-opcache \
-        php7.3-readline \
-        php7.3-xml \
-        php7.3-zip \
+        php7.4-amqp \
+        php7.4-bcmath \
+        php7.4-gd \
+        php7.4-imap \
+        php7.4-intl \
+        php7.4-soap \
+        php7.4-xsl \
+        php7.4-cli \
+        php7.4-curl \
+        php7.4-mbstring \
+        php7.4-opcache \
+        php7.4-readline \
+        php7.4-xml \
+        php7.4-zip \
         nginx \
         tzdata && \
-    rm -f /etc/php/7.3/fpm/pool.d/www.conf && \
+    rm -f /etc/php/7.4/fpm/pool.d/www.conf && \
     echo $TZ > /etc/timezone && \
     rm /etc/localtime && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
@@ -52,14 +52,14 @@ RUN apt-get -y --no-install-recommends update \
     chmod +x /usr/bin/wait-for-it && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* /var/cache/apt/lists
 
-COPY config/php.ini /etc/php/7.3/fpm/conf.d/00-default.ini
-COPY config/php.ini /etc/php/7.3/cli/conf.d/00-default.ini
-COPY config/php.ini /etc/php/7.3/conf.d/00-default.ini
-COPY config/php-pool.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY config/php.ini /etc/php/7.4/fpm/conf.d/00-default.ini
+COPY config/php.ini /etc/php/7.4/cli/conf.d/00-default.ini
+COPY config/php.ini /etc/php/7.4/conf.d/00-default.ini
+COPY config/php-pool.conf /etc/php/7.4/fpm/pool.d/www.conf
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
 
-#CMD php-fpm7.3
+#CMD php-fpm7.4
 #CMD nginx
 EXPOSE 9000
 EXPOSE 8080
