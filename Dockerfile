@@ -57,7 +57,6 @@ COPY config/php.ini /etc/php/8.1/conf.d/00-default.ini
 COPY config/php-pool.conf /etc/php/8.1/fpm/pool.d/www.conf
 COPY config/nginx.conf /etc/nginx/nginx.conf
 
-
 #CMD php-fpm8.1
 #CMD nginx
 EXPOSE 9000
