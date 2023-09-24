@@ -12,7 +12,10 @@ WORKDIR /var/www
 COPY wait-for-it.sh /usr/bin/wait-for-it
 RUN apt-get -y --no-install-recommends update \
     && apt-get install -y --no-install-recommends gnupg \
-    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu bionic main" > /etc/apt/sources.list.d/ondrej-php.list \
+    && apt-get update --fix-missing \
+    && apt-get install -y software-properties-common \
+    && rm -rf /var/lib/apt/lists/* \
+    && add-apt-repository ppa:ondrej/php \
     && echo "deb http://archive.ubuntu.com/ubuntu bionic main multiverse restricted universe" >> /etc/apt/sources.list \
     && echo "deb http://archive.ubuntu.com/ubuntu bionic-security main multiverse restricted universe" >> /etc/apt/sources.list \
     && echo "deb http://archive.ubuntu.com/ubuntu bionic-updates main multiverse restricted universe" >> /etc/apt/sources.list \
@@ -25,6 +28,7 @@ RUN apt-get -y --no-install-recommends update \
         php8.1-memcached \
         php8.1-fpm \
         php8.1-mysql \
+        php8.1-pgsql \
         php8.1-redis \
         php8.1-amqp \
         php8.1-bcmath \
